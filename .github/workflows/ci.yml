@@ -3,8 +3,14 @@ name: CI
 on:
   push:
     branches: [ main, develop ]
+    paths:
+      - 'atlas-embeddings/**'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches: [ main, develop ]
+    paths:
+      - 'atlas-embeddings/**'
+      - '.github/workflows/ci.yml'
 
 env:
   CARGO_TERM_COLOR: always
@@ -14,16 +20,24 @@ jobs:
   check:
     name: Check
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: atlas-embeddings
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: atlas-embeddings
       - run: cargo check --all-features
       - run: cargo check --no-default-features
 
   test:
     name: Test Suite
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: atlas-embeddings
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -34,11 +48,16 @@ jobs:
         with:
           toolchain: ${{ matrix.rust }}
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: atlas-embeddings
       - run: cargo test --all-features
 
   fmt:
     name: Rustfmt
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: atlas-embeddings
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -49,21 +68,31 @@ jobs:
   clippy:
     name: Clippy
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: atlas-embeddings
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: atlas-embeddings
       - run: cargo clippy --all-targets --all-features -- -D warnings -D clippy::all -D clippy::pedantic -D clippy::nursery -D clippy::cargo -D clippy::float_arithmetic
 
   docs:
     name: Documentation
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: atlas-embeddings
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: atlas-embeddings
       - run: cargo doc --all-features --no-deps
         env:
           RUSTDOCFLAGS: -D warnings
@@ -71,6 +100,9 @@ jobs:
   audit:
     name: Security Audit
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: atlas-embeddings
     steps:
       - uses: actions/checkout@v4
       - uses: rustsec/audit-check@v1.4.1
@@ -81,19 +113,13 @@ jobs:
     name: Benchmarks
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    defaults:
+      run:
+        working-directory: atlas-embeddings
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: atlas-embeddings
       - run: cargo bench --all-features --no-fail-fast
-
-  # Disabled due to proc-macro2 minimal version incompatibility
-  # minimal-versions:
-  #   name: Minimal Versions
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: dtolnay/rust-toolchain@nightly
-  #     - uses: Swatinem/rust-cache@v2
-  #     - run: cargo +nightly update -Z minimal-versions
-  #     - run: cargo check --all-features

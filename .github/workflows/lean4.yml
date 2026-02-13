@@ -4,12 +4,12 @@ on:
   push:
     branches: [ main, develop ]
     paths:
-      - 'lean4/**'
+      - 'atlas-embeddings/lean4/**'
       - '.github/workflows/lean4.yml'
   pull_request:
     branches: [ main, develop ]
     paths:
-      - 'lean4/**'
+      - 'atlas-embeddings/lean4/**'
       - '.github/workflows/lean4.yml'
 
 jobs:
@@ -29,26 +29,26 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            lean4/.lake
-            lean4/lake-packages
-          key: ${{ runner.os }}-lean4-${{ hashFiles('lean4/lean-toolchain', 'lean4/lakefile.lean') }}
+            atlas-embeddings/lean4/.lake
+            atlas-embeddings/lean4/lake-packages
+          key: ${{ runner.os }}-lean4-${{ hashFiles('atlas-embeddings/lean4/lean-toolchain', 'atlas-embeddings/lean4/lakefile.lean') }}
           restore-keys: |
             ${{ runner.os }}-lean4-
 
       - name: Update Lake dependencies
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: lake update
 
       - name: Download mathlib4 cache
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: lake exe cache get || true
 
       - name: Build Lean project
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: lake build
 
       - name: Verify no sorry statements
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: |
           # Look for actual sorry usage (not in comments)
           # Match: sorry, sorry), := sorry, etc. but not "NO `sorry` POLICY"
@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Count theorems
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: |
           THEOREM_COUNT=$(grep -r "^theorem " AtlasEmbeddings/ --include="*.lean" | wc -l)
           echo "Total theorems proven: $THEOREM_COUNT"
@@ -86,22 +86,22 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            lean4/.lake
-            lean4/lake-packages
-          key: ${{ runner.os }}-lean4-${{ hashFiles('lean4/lean-toolchain', 'lean4/lakefile.lean') }}
+            atlas-embeddings/lean4/.lake
+            atlas-embeddings/lean4/lake-packages
+          key: ${{ runner.os }}-lean4-${{ hashFiles('atlas-embeddings/lean4/lean-toolchain', 'atlas-embeddings/lean4/lakefile.lean') }}
           restore-keys: |
             ${{ runner.os }}-lean4-
 
       - name: Update Lake dependencies
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: lake update
 
       - name: Download mathlib4 cache
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: lake exe cache get || true
 
       - name: Test individual modules
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: |
           echo "Testing Arithmetic module..."
           lake env lean AtlasEmbeddings/Arithmetic.lean
@@ -132,7 +132,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check line length
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: |
           if grep -rn ".\{101,\}" AtlasEmbeddings/ --include="*.lean" | grep -v "http"; then
             echo "Warning: Found lines longer than 100 characters"
@@ -143,7 +143,7 @@ jobs:
           fi
 
       - name: Check for tabs
-        working-directory: lean4
+        working-directory: atlas-embeddings/lean4
         run: |
           if grep -r $'\t' AtlasEmbeddings/ --include="*.lean"; then
             echo "Error: Found tab characters (use spaces)"

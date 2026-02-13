@@ -3,6 +3,9 @@ name: Documentation
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'atlas-embeddings/**'
+      - '.github/workflows/docs.yml'
   workflow_dispatch:
 
 permissions:
@@ -24,8 +27,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
 
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: atlas-embeddings
 
       - name: Build documentation
+        working-directory: atlas-embeddings
         run: |
           cargo doc --all-features --no-deps
           echo '<meta http-equiv="refresh" content="0; url=atlas_embeddings/">' > target/doc/index.html
@@ -35,7 +41,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: target/doc
+          path: atlas-embeddings/target/doc
 
   deploy:
     name: Deploy to GitHub Pages

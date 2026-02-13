@@ -744,7 +744,7 @@
 //!
 //! **License**
 //!
-//! This project is licensed under the [MIT License](https://github.com/UOR-Foundation/atlas-embeddings/blob/main/LICENSE-MIT).
+//! This project is licensed under the [MIT License](https://github.com/UOR-Foundation/research/blob/main/atlas-embeddings/LICENSE-MIT).
 //!
 //! ---
 //!
