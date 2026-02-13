@@ -6,14 +6,14 @@
 
 <p align="center">
   <em>🌟 The Golden Seed Fractal: 96-fold self-similar visualization of the Atlas 🌟</em><br>
-  <sub><a href="https://github.com/UOR-Foundation/atlas-embeddings/releases/latest/download/golden_seed_fractal_depth2.svg">Download Full Resolution Fractal (Depth 2, 894K points)</a></sub>
+  <sub><a href="https://github.com/UOR-Foundation/research/releases/latest/download/golden_seed_fractal_depth2.svg">Download Full Resolution Fractal (Depth 2, 894K points)</a></sub>
 </p>
 
-[![CI](https://github.com/UOR-Foundation/atlas-embeddings/workflows/CI/badge.svg)](https://github.com/UOR-Foundation/atlas-embeddings/actions)
+[![CI](https://github.com/UOR-Foundation/research/workflows/CI/badge.svg)](https://github.com/UOR-Foundation/research/actions?query=workflow%3ACI)
 [![Documentation](https://docs.rs/atlas-embeddings/badge.svg)](https://docs.rs/atlas-embeddings)
 [![Crates.io](https://img.shields.io/crates/v/atlas-embeddings.svg)](https://crates.io/crates/atlas-embeddings)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17289540.svg)](https://doi.org/10.5281/zenodo.17289540)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/UOR-Foundation/atlas-embeddings#license)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/UOR-Foundation/research/blob/main/atlas-embeddings/LICENSE-MIT)
 [![Rust Version](https://img.shields.io/badge/rust-1.75%2B-blue.svg)](https://www.rust-lang.org)
 
 > First-principles construction of exceptional Lie groups from the Atlas of Resonance Classes

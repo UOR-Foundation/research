@@ -1,6 +1,6 @@
 /-
 Copyright (c) 2025 Atlas Embeddings Contributors. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
+Released under MIT license as described in the file LICENSE-MIT (see repo root).
 
 # Atlas Embeddings: Exceptional Lie Groups from First Principles
 

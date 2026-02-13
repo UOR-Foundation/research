@@ -23,11 +23,15 @@ jobs:
 
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: atlas-embeddings
 
       - name: Build examples in release mode
+        working-directory: atlas-embeddings
         run: cargo build --release --examples
 
       - name: Generate Golden Seed Fractals
+        working-directory: atlas-embeddings
         run: |
           echo "Generating depth 0 and 1..."
           cargo run --release --example generate_golden_seed_fractal
@@ -35,18 +39,22 @@ jobs:
           cargo run --release --example generate_depth2_fractal
 
       - name: Generate Dynkin Diagrams
+        working-directory: atlas-embeddings
         run: cargo run --release --example generate_dynkin_diagrams
 
       - name: Generate E8 Projections
+        working-directory: atlas-embeddings
         run: cargo run --release --example visualize_e8_projections
 
       - name: List generated files
+        working-directory: atlas-embeddings
         run: |
           echo "Generated artifacts:"
           ls -lh *.svg *.csv
 
       - name: Upload artifacts to release
         if: github.event_name == 'release'
+        working-directory: atlas-embeddings
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -65,6 +73,7 @@ jobs:
             --clobber
 
       - name: Summary
+        working-directory: atlas-embeddings
         run: |
           echo "## 🌟 Golden Seed Fractal Generation Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -85,10 +94,12 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Verify version matches tag
+        working-directory: atlas-embeddings
         run: |
           CARGO_VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
           TAG_VERSION=${{ github.event.release.tag_name }}
           TAG_VERSION=${TAG_VERSION#v}  # Remove 'v' prefix if present
+          TAG_VERSION=${TAG_VERSION#atlas-embeddings/}  # Remove project prefix if present
           echo "Cargo.toml version: $CARGO_VERSION"
           echo "Release tag version: $TAG_VERSION"
           if [ "$CARGO_VERSION" != "$TAG_VERSION" ]; then
@@ -97,6 +108,7 @@ jobs:
           fi
 
       - name: Publish to crates.io
+        working-directory: atlas-embeddings
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         run: cargo publish --token "${CARGO_REGISTRY_TOKEN}"
