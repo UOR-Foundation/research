@@ -773,6 +773,7 @@ pub mod e8;
 pub mod embedding;
 pub mod foundations;
 pub mod groups;
+pub mod invariant;
 pub mod weyl;
 
 #[cfg(feature = "visualization")]
